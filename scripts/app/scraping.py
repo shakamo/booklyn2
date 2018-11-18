@@ -6,7 +6,6 @@ import urllib.request as req
 import zipfile
 
 import app
-from app import scraping
 
 logger = app.get_module_logger(__name__)
 
@@ -14,17 +13,5 @@ logger = app.get_module_logger(__name__)
 def download():
     logger.info(app.get_input_path())
 
-    scraping.download()
+    url='https://www.anikore.jp/chronicle/2018/autumn/'
 
-
-
-
-if __name__ == "__main__":
-    logger.info('Start')
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--filename', default='USDJPY')
-    args = parser.parse_args()
-
-    logger.info(args)
-    download()

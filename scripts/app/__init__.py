@@ -3,7 +3,9 @@ from logging import getLogger, StreamHandler, DEBUG, Formatter
 from pathlib import Path
 
 
+
 ROOT = Path(__file__).parent.parent
+sys.path.append(str(ROOT))
 
 
 def get_module_logger(module_name):
@@ -19,11 +21,10 @@ def get_module_logger(module_name):
 
 
 def get_input_path():
-    os.mkdir(ROOT.joinpath('input'))
-    os.mkdir(ROOT.joinpath('output'))
+    os.makedirs(ROOT.joinpath('input'), exist_ok=True)
     return ROOT.joinpath('input')
 
 
 def get_output_path():
-    Path.mkdir(ROOT.joinpath('output'))
+    os.makedirs(ROOT.joinpath('output'), exist_ok=True)
     return ROOT.joinpath('output')
