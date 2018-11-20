@@ -1,17 +1,43 @@
-# python fx_1_historical_data_downloader.py
-# python fx_1_historical_data_downloader.py -f USDJPY -u http://tools.fxdd.com/tools/M1Data/USDJPY.zip
-
 import argparse
 import urllib.request as req
-import zipfile
+import re
+import MeCab
 
-import app
+import unicodedata
+import scrapy
 
-logger = app.get_module_logger(__name__)
+from .lib import logger
+
+logger = logger.get_module_logger(__name__)
 
 
-def download():
-    logger.info(app.get_input_path())
+def parse_item(response):
+    yield {
+        'title': format_text(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]),
+        'fastText': get_surfaces(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]),
+        'story': response.css('blockquote::text').extract_first()
+    }
 
-    url='https://www.anikore.jp/chronicle/2018/autumn/'
 
+def get_surfaces(row):
+    """
+    文書を分かち書きし単語単位に分割
+    """
+    print(row)
+    content = format_text(row)
+    tagger = MeCab.Tagger('')
+    node = tagger.parse(content)
+
+    str = ''
+    for n in node.split('\n'):
+        value = n.split('\t')[0]
+        if value != "" and value != "EOS":
+            str += ' ' + value
+    return str
+
+
+def format_text(text):
+    """
+    サニタイズ処理 UTF-8-MAC を UTF-8 に変換
+    """
+    return unicodedata.normalize('NFC', text)

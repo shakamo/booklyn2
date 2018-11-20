@@ -1,5 +1,8 @@
 # booklyn2
 
+#### pylint
+conda install --channel https://conda.anaconda.org/anaconda pylint
+
 
 #### fastText
     git clone 
@@ -16,5 +19,8 @@
 
 #### Scrapy
     pip install scrapy
+
+##### Scrapy run
+    scrapy runspider scraping.py -o a.json --set=FEED_EXPORT_ENCODING='utf-8'
 
 ![Alt text](./Booklyn.svg)

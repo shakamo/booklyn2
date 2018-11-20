@@ -7,5 +7,9 @@
 			"path": "/Users/Jun/Develop/GitHub/booklyn2"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": false,
+		"python.linting.pep8Enabled": true
+	}
 }
