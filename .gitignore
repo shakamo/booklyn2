@@ -1,3 +1,6 @@
 scripts/__pycache__
 scripts/.scrapy
 scripts/app/__pycache__
+scripts/output
+scripts/.venv
+scripts/app/lib/__pycache__

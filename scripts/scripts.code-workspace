@@ -9,7 +9,11 @@
 	],
 	"settings": {
 		"python.linting.enabled": true,
-		"python.linting.pylintEnabled": false,
-		"python.linting.pep8Enabled": true
+		"python.linting.pylintEnabled": true,
+		"python.linting.pep8Enabled": true,
+		"python.pythonPath": "/Users/Jun/Develop/GitHub/booklyn2/scripts/.venv/bin/python",
+		"python.autoComplete.extraPaths": [
+			"/Users/Jun/Develop/GitHub/booklyn2/scripts/.venv/lib"
+		]
 	}
 }

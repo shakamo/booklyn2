@@ -1,5 +1,9 @@
 # booklyn2
 
+####
+    export PIPENV_VENV_IN_PROJECT=true
+
+
 #### pylint
 conda install --channel https://conda.anaconda.org/anaconda pylint
 
@@ -24,3 +28,13 @@ conda install --channel https://conda.anaconda.org/anaconda pylint
     scrapy runspider scraping.py -o a.json --set=FEED_EXPORT_ENCODING='utf-8'
 
 ![Alt text](./Booklyn.svg)
+
+
+#### Docker
+    cd scripts
+    docker build -t scraping . -t 
+    docker run -it --rm -v $(pwd):/app --entrypoint /bin/bash -t scraping
+    docker run --rm -v $(pwd):/app scraping scrapy runspider scraping_anikore.py --set=FEED_EXPORT_ENCODING='utf-8'
+
+    pipenv run scrapy runspider scraping_anikore.py --set=FEED_EXPORT_ENCODING='utf-8'
+
