@@ -2,12 +2,36 @@ import sys
 import os
 import shutil
 from pathlib import Path
+import MeCab
 
-from . import scraping
+import unicodedata
 from . import lib
+from . import classification
+
 
 ROOT = Path(__file__).parent.parent
 sys.path.append(str(ROOT))
+
+
+def get_wakati(text):
+    """
+    文書を分かち書きし単語単位に分割する
+    """
+    tagger = MeCab.Tagger(
+        '-Owakati -d /usr/local/lib/mecab/dic/mecab-ipadic-neologd')
+    return tagger.parse(text).replace(' \n', '')
+
+
+def sanitize(text):
+    """
+    サニタイズ処理を行う
+    UTF-8-MAC を UTF-8 に変換
+    """
+    return unicodedata.normalize('NFC', text)
+
+
+
+
 
 
 def get_input_path():
@@ -57,4 +81,3 @@ def exists_output_fasttext_model():
 def remove_output_fasttext_model():
     if exists_output_fasttext_model():
         os.remove(ROOT.joinpath('output').joinpath('fasttext.bin'))
-

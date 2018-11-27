@@ -1,3 +1,7 @@
+from .lib import logger
+import unicodedata
+import MeCab
+import app
 import threading
 import codecs
 import json
@@ -5,7 +9,17 @@ import fastText as ft
 from fastText import train_supervised
 
 
-class Fasttext:
+def classify(name, value):
+    f = FastTextML()
+    result = f.predict(app.get_wakati(value['title']))
+    print(result)
+    uuid = result[0][0].replace('__label__', '')
+    score = result[1][0]
+    print(uuid)
+    print(score)
+
+
+class FastTextML:
     """
     """
 
@@ -16,18 +30,20 @@ class Fasttext:
         with cls._lock:
             if not cls._instance:
                 cls._instance = super().__new__(cls)
+                cls._instance._lock = None
         return cls._instance
 
     def __init__(self):
         try:
             if self._lock is None:
                 self._lock = threading.Lock()
-                self._model = ft.load_model('output/model.bin')
+                self._model = ft.load_model(app.get_output_fasttext_model())
+            
         except IOError:
             raise NotImplementedError('load error to model.bin')
 
     def predict(self, wakati_text):
-        return self._model.predict(wakati_text)
+        return self._model.predict([wakati_text], k=3)
 
     def train(self):
         self._model = train_supervised(
@@ -35,10 +51,10 @@ class Fasttext:
             loss="hs", dim=100
         )
         with self._lock:
-            self.print_results(*self._model.test("output/temp.txt"))
+            self.__print_results(*self._model.test("output/temp.txt"))
             self._model.save_model('output/model.bin')
 
-    def print_results(self, N, p, r):
+    def __print_results(self, N, p, r):
         print("N\t" + str(N))
         print("P@{}\t{:.3f}".format(1, p))
         print("R@{}\t{:.3f}".format(1, r))
