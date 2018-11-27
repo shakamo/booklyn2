@@ -12,7 +12,6 @@ from fastText import train_supervised
 def classify(name, value):
     f = FastTextML()
     result = f.predict(app.get_wakati(value['title']))
-    print(result)
     uuid = result[0][0].replace('__label__', '')
     score = result[1][0]
     print(uuid)
@@ -43,7 +42,7 @@ class FastTextML:
             raise NotImplementedError('load error to model.bin')
 
     def predict(self, wakati_text):
-        return self._model.predict([wakati_text], k=3)
+        return self._model.predict(wakati_text)
 
     def train(self):
         self._model = train_supervised(
