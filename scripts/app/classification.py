@@ -7,15 +7,35 @@ import codecs
 import json
 import fastText as ft
 from fastText import train_supervised
+from . import master_file
+import uuid as u
 
 
 def classify(name, value):
+
+    # fastText シングルトンクラスを取得
     f = FastTextML()
+    # fastTextのスコアを取得
     result = f.predict(app.get_wakati(value['title']))
     uuid = result[0][0].replace('__label__', '')
     score = result[1][0]
-    print(uuid)
-    print(score)
+
+    # Masterファイルを読み込み（シングルトン）
+    master = master_file.MasterFile()
+
+    if 0.5 < score:
+        # 同じUUIDで上書き保存
+        master.add(name, uuid, value)
+    else:
+        # UUIDを採番して保存
+        master.add(name, str(u.uuid4()), value)
+
+        # 結果がどの程度違うのか、差分をログに出力
+        if master.get(name, uuid) is not None:
+            if value['title'] != master.get(name, uuid)['title']:
+                print(value['title'] + ' or ' + master.get(name, uuid)['title'])
+
+    master.save()
 
 
 class FastTextML:

@@ -15,6 +15,8 @@ logger = logger.get_module_logger(__name__)
 class BlogSpider(scrapy.Spider):
     name = 'blogspider'
 
+    pattern = re.compile(r'[^/]+(?=/$|$)')
+
     custom_settings = {
         'HTTPCACHE_ENABLED': True,
         'HTTPCACHE_EXPIRATION_SECS': 0,
@@ -29,7 +31,6 @@ class BlogSpider(scrapy.Spider):
         """
         デフォルトメソッド
         """
-        print(response)
         for page in response.css('.chronicle_title > a'):
             yield response.follow(page, self.parse_season)
 
@@ -51,7 +52,7 @@ class BlogSpider(scrapy.Spider):
 
     def parse_item(self, response):
         value = {
-            'key': '',
+            'key': BlogSpider.pattern.search(response.url).group(0),
             'title': app.sanitize(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]),
             'story': app.sanitize(response.css('blockquote::text').extract_first())
         }

@@ -22,7 +22,7 @@ app.remove_output_train_text()
 with open(app.get_output_train_text(), 'w') as f:
     for data in df:
         id = str(uuid.uuid4())
-        print('__label__' + id + ' , ' + data['fastText'], file=f)
+        print('__label__' + id + ', ' + data['fastText'], file=f)
 
 
 model = train_supervised(
