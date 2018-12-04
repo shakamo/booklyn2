@@ -10,7 +10,7 @@ autopep8 = "*"
 [packages]
 mecab-python3 = "*"
 scrapy = "*"
-fasttext = {path = "./fasttext"}
+fasttext = {path = "./fastText"}
 
 [requires]
 python_version = "3.7"

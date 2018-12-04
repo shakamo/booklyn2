@@ -1,6 +1,7 @@
 import threading
 import codecs
 import json
+import app
 
 
 class MasterFile:
@@ -27,7 +28,9 @@ class MasterFile:
                 with codecs.open('output/master.json', 'r', "utf-8") as f:
                     self._data = json.load(f)
         except IOError:
-            raise NotImplementedError('load error to master.json')
+            with self._lock:
+                with codecs.open('output/master.json', 'w', "utf-8") as f:
+                    json.dump({}, f, ensure_ascii=False)
 
     def add(self, name, uuid, value):
         with self._lock:

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "58d0244c7eb7a72a47ec0d78038af9a69ec0e72ce0918842a453c7836fb29381"
+            "sha256": "b6eca6e4fd3d797d7085d64901e605c2d5c7fa151d026d70cfbe28d776ba0480"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -113,7 +113,7 @@
             "version": "==1.0.3"
         },
         "fasttext": {
-            "path": "./fasttext"
+            "path": "./fastText"
         },
         "hyperlink": {
             "hashes": [

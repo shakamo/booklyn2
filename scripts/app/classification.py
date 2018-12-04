@@ -8,34 +8,38 @@ import json
 import fastText as ft
 from fastText import train_supervised
 from . import master_file
+from . import learning
 import uuid as u
+
+lock = threading.Lock()
 
 
 def classify(name, value):
-
-    # fastText シングルトンクラスを取得
+    # fastTextクラスを取得（シングルトン）
     f = FastTextML()
-    # fastTextのスコアを取得
-    result = f.predict(app.get_wakati(value['title']))
-    uuid = result[0][0].replace('__label__', '')
-    score = result[1][0]
-
     # Masterファイルを読み込み（シングルトン）
     master = master_file.MasterFile()
 
-    if 0.5 < score:
-        # 同じUUIDで上書き保存
-        master.add(name, uuid, value)
-    else:
-        # UUIDを採番して保存
-        master.add(name, str(u.uuid4()), value)
+    with lock:
+        # fastTextのスコアを取得
+        uuid, score = f.predict(app.get_wakati(value['title']))
 
-        # 結果がどの程度違うのか、差分をログに出力
-        if master.get(name, uuid) is not None:
-            if value['title'] != master.get(name, uuid)['title']:
-                print(value['title'] + ' or ' + master.get(name, uuid)['title'])
+        if uuid and 0.5 < score:
+            # 同じUUIDで上書き保存
+            master.add(name, uuid, value)
+        else:
+            # UUIDを採番して保存
+            uuid = str(u.uuid4())
+            master.add(name, uuid, value)
+            # 再学習前にマスタデータを保存
+            master.save()
+            # 再学習
+            learning.learn(uuid, app.get_wakati(value['title']))
 
-    master.save()
+            # 結果がどの程度違うのか、差分をログに出力
+            if master.get(name, uuid) is not None:
+                if value['title'] != master.get(name, uuid)['title']:
+                    print(value['title'] + ' or ' + master.get(name, uuid)['title'])
 
 
 class FastTextML:
@@ -56,13 +60,19 @@ class FastTextML:
         try:
             if self._lock is None:
                 self._lock = threading.Lock()
-                self._model = ft.load_model(app.get_output_fasttext_model())
-            
+                if app.exists_output_fasttext_model():
+                    self._model = ft.load_model(app.get_output_fasttext_model())
+
         except IOError:
             raise NotImplementedError('load error to model.bin')
 
     def predict(self, wakati_text):
-        return self._model.predict(wakati_text)
+        if hasattr(self, '_model'):
+            result = self._model.predict(wakati_text)
+            uuid = result[0][0].replace('__label__', '')
+            score = result[1][0]
+            return uuid, score
+        return None, None
 
     def train(self):
         self._model = train_supervised(
