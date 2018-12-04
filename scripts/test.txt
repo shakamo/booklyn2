@@ -14,4 +14,19 @@ print(re.sub('[^ぁ-んァ-ンーa-zA-Z0-9一-龠０-９\-\r\s]+', '', s))
 print(re.sub('[\s]+', ' ', s))
 
 
+部品集
+https://htmlstream.com/public/preview/unify-v2.6/unify-main/shortcodes/index.html
+
+
+検索結果は、こいつをベースに作る
+https://htmlstream.com/public/preview/unify-v2.6/unify-main/pages/page-search-results-grid-veiw-left-sidebar-1.html
+
+https://htmlstream.com/public/preview/unify-v2.6/unify-main/blog/blog-grid-classic-4.html
+
+
+https://htmlstream.com/public/preview/unify-v2.6/unify-main/shortcodes/shortcode-blocks-products-advanced.html
+
+テーブル
+https://htmlstream.com/public/preview/unify-v2.6/unify-main/shortcodes/shortcode-base-tables.html
+
 
