@@ -1,0 +1,17 @@
+
+
+https://regex101.com/
+
+import re
+s = 'aaa@xxx.com bbb@yyy.com ccc@zzz.com'
+
+
+不要な文字を削除
+print(re.sub('[^ぁ-んァ-ンーa-zA-Z0-9一-龠０-９\-\r\s]+', '', s))
+
+
+全角スペースを半角に変換
+print(re.sub('[\s]+', ' ', s))
+
+
+
