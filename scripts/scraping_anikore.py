@@ -5,6 +5,7 @@ import urllib.request as req
 
 import MeCab
 import scrapy
+from app import learning
 
 import app
 from app.lib import logger
@@ -37,7 +38,10 @@ class BlogSpider(scrapy.Spider):
     def parse_season(self, response):
         """
         デフォルトメソッド
-        """
+        """        # 再学習
+        # fastTextクラスを取得（シングルトン）
+        f = app.classification.FastTextML()
+        f.train()
         for page in response.css('.subMenuListSeason > li > a'):
             yield response.follow(page, self.parse_list)
 
@@ -51,9 +55,12 @@ class BlogSpider(scrapy.Spider):
             yield response.follow(page, self.parse_list)
 
     def parse_item(self, response):
+        if len(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]) <= 3:
+            print(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1])
+            return
         value = {
             'key': BlogSpider.pattern.search(response.url).group(0),
             'title': app.sanitize(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]),
             'story': app.sanitize(response.css('blockquote::text').extract_first())
         }
-        app.classification.classify('anikore', value)
+        app.classification.classify('anikore', value, False)

@@ -31,6 +31,7 @@ class MasterFile:
             with self._lock:
                 with codecs.open('output/master.json', 'w', "utf-8") as f:
                     json.dump({}, f, ensure_ascii=False)
+                    self._data = {}
 
     def add(self, name, uuid, value):
         with self._lock:
@@ -46,6 +47,9 @@ class MasterFile:
                 return None
         
         return self._data[name][uuid]
+
+    def get_training_data(self):
+        return self._data
 
     def save(self):
         try:
