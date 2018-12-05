@@ -25,10 +25,19 @@ def classify(name, value, isLock=True):
 
 
 def __classify(name, value, isLock):
-    # fastTextクラスを取得（シングルトン）
-    f = FastTextML()
     # Masterファイルを読み込み（シングルトン）
     master = master_file.MasterFile()
+
+    data = master.get_training_data()
+    for name in data:
+        for uuid in data[name]:
+            if data[name][uuid]['key'] == value['key']:
+                data[name][uuid] = value
+                print('ある！')
+                return
+
+    # fastTextクラスを取得（シングルトン）
+    f = FastTextML()
 
     # fastTextのスコアを取得
     uuid, score = f.predict(app.get_wakati(value['title']))

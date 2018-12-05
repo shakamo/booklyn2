@@ -14,4 +14,3 @@ from . import traning_file
 import threading
 
 logger = logger.get_module_logger(__name__)
-

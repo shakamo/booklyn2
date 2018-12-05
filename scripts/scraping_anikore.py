@@ -38,10 +38,7 @@ class BlogSpider(scrapy.Spider):
     def parse_season(self, response):
         """
         デフォルトメソッド
-        """        # 再学習
-        # fastTextクラスを取得（シングルトン）
-        f = app.classification.FastTextML()
-        f.train()
+        """
         for page in response.css('.subMenuListSeason > li > a'):
             yield response.follow(page, self.parse_list)
 
