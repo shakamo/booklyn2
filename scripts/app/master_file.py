@@ -1,6 +1,7 @@
 import threading
 import codecs
 import json
+import uuid as u
 import app
 
 
@@ -58,3 +59,16 @@ class MasterFile:
                     json.dump(self._data, f, ensure_ascii=False)
         except IOError:
             raise NotImplementedError('save error to master.json')
+
+    def append(self, name, key, value):
+        with self._lock:
+            for uuid in self._data:
+                if self._data[uuid].get(name) is not None:
+                    if self._data[uuid][name].get(key) is not None:
+                        self._data[uuid][name][key] = value
+                        return
+
+            uuid = str(u.uuid4())
+            self._data[uuid] = {}
+            self._data[uuid][name] = {}
+            self._data[uuid][name][key] = value

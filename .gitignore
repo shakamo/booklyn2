@@ -4,3 +4,4 @@ scripts/app/__pycache__
 scripts/output
 scripts/.venv
 scripts/app/lib/__pycache__
+test.log

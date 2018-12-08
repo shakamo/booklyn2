@@ -5,10 +5,11 @@ import urllib.request as req
 
 import MeCab
 import scrapy
-from app import learning
 
 import app
+from app import learning, master_file
 from app.lib import logger
+import logging
 
 logger = logger.get_module_logger(__name__)
 
@@ -33,6 +34,7 @@ class BlogSpider(scrapy.Spider):
         デフォルトメソッド
         """
         for page in response.css('.chronicle_title > a'):
+            logger.info(page.css('::text').extract())
             yield response.follow(page, self.parse_season)
 
     def parse_season(self, response):
@@ -40,24 +42,32 @@ class BlogSpider(scrapy.Spider):
         デフォルトメソッド
         """
         for page in response.css('.subMenuListSeason > li > a'):
+            logger.info(page.css('::text').extract())
             yield response.follow(page, self.parse_list)
 
     def parse_list(self, response):
         """
         デフォルトメソッド
         """
+        # Masterファイルを読み込み（シングルトン）
+        master = master_file.MasterFile()
         for page in response.css('span.animeTitle > a'):
+            logger.info(*page.css('::text').extract())
             yield response.follow(page, self.parse_item)
         for page in response.css('a.next'):
             yield response.follow(page, self.parse_list)
+            master.save()
 
     def parse_item(self, response):
-        if len(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]) <= 3:
-            print(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1])
-            return
+        # if len(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]) <= 3:
+        #     return
+        key = BlogSpider.pattern.search(response.url).group(0)
         value = {
-            'key': BlogSpider.pattern.search(response.url).group(0),
             'title': app.sanitize(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]),
             'story': app.sanitize(response.css('blockquote::text').extract_first())
         }
-        app.classification.classify('anikore', value, False)
+
+        logger.info(value)
+        # Masterファイルを読み込み（シングルトン）
+        master = master_file.MasterFile()
+        master.append('anikore', key, value)
