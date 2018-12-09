@@ -18,6 +18,7 @@ class BlogSpider(scrapy.Spider):
     name = 'blogspider'
 
     pattern = re.compile(r'[^/]+(?=/$|$)')
+    title_pattern = re.compile(r'(.*)[（(][^)）]*[)）]$')
 
     custom_settings = {
         'HTTPCACHE_ENABLED': True,
@@ -62,8 +63,14 @@ class BlogSpider(scrapy.Spider):
         # if len(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]) <= 3:
         #     return
         key = BlogSpider.pattern.search(response.url).group(0)
+
+        title = app.sanitize(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1])
+        result = BlogSpider.title_pattern.search(title)
+        if result:
+            title = result.group(0)
+
         value = {
-            'title': app.sanitize(response.css('.animeDetailCommonHeadTitle > h2 > a::text').extract_first()[1:-1]),
+            'title': title,
             'story': app.sanitize(response.css('blockquote::text').extract_first())
         }
 
