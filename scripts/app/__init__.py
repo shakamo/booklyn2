@@ -1,12 +1,9 @@
 import sys
 import os
-import shutil
 from pathlib import Path
 import MeCab
 import re
 import unicodedata
-from . import lib
-from . import classification
 
 
 ROOT = Path(__file__).parent.parent
@@ -22,8 +19,8 @@ def get_wakati(resource):
     文書を分かち書きし単語単位に分割する
     """
     text = unicodedata.normalize('NFC', resource)
-    text = re.sub('[^ぁ-んァ-ンーa-zA-Z0-9一-龠０-９\-\r\s]+', '', text)
-    text = re.sub('[\s]+', ' ', text)
+    text = re.sub(r'[^ぁ-んァ-ンーa-zA-Z0-9一-龠０-９\-\r\s]+', '', text)
+    text = re.sub(r'[\s]+', ' ', text)
     text = re.sub(r'[\n|\r|\t]', '', text)
     text = re.sub(r'[１]', '1', text)
     text = re.sub(r'[２]', '2', text)

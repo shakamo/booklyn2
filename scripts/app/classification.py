@@ -1,17 +1,12 @@
-from .lib import logger
-import unicodedata
-import MeCab
-import app
 import threading
-import codecs
-import json
+import uuid as u
+
 import fastText as ft
 from fastText import train_supervised
-from . import master_file
 
-from . import traning_file
-from . import learning
-import uuid as u
+import app
+
+from . import learning, master_file, traning_file
 
 lock = threading.Lock()
 

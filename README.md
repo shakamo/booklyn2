@@ -1,5 +1,19 @@
 # booklyn2
 
+#### Python 環境構築
+1. Pythonのインストール
+    * brew install python3
+    * brew install pipenv
+2. venv の作成
+    * python3 -m venv .venv
+3. venv を有効にする
+    * source scripts/bin/activate
+4. fastText のインストール
+    * pipenv install
+4. Pipfile のインストール
+    * pipenv install
+
+
 ####
     export PIPENV_VENV_IN_PROJECT=true
 

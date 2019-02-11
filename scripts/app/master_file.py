@@ -2,7 +2,6 @@ import threading
 import codecs
 import json
 import uuid as u
-import app
 
 
 class MasterFile:

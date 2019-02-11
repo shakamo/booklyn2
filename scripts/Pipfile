@@ -11,6 +11,9 @@ autopep8 = "*"
 mecab-python3 = "*"
 scrapy = "*"
 fasttext = {path = "./fastText"}
+pep8 = "*"
+autopep8 = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.7"

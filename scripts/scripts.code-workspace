@@ -4,16 +4,26 @@
 			"path": "."
 		},
 		{
-			"path": "/Users/Jun/Develop/GitHub/booklyn2"
+			"path": "../"
 		}
 	],
 	"settings": {
 		"python.linting.enabled": true,
-		"python.linting.pylintEnabled": true,
-		"python.linting.pep8Enabled": true,
-		"python.pythonPath": "/Users/Jun/Develop/GitHub/booklyn2/scripts/.venv/bin/python",
+		"python.linting.pylintEnabled": false,
+		"python.linting.pep8Enabled": false,
+		"python.pythonPath": "./.venv/bin/python",
 		"python.autoComplete.extraPaths": [
-			"/Users/Jun/Develop/GitHub/booklyn2/scripts/.venv/lib"
-		]
+			"./.venv/lib"
+		],
+		"git.ignoreLimitWarning": true,
+		"python.jediEnabled": false,
+		"explorer.confirmDelete": false,
+		"git.confirmSync": false,
+		"git.autofetch": true,
+		"explorer.confirmDragAndDrop": false,
+		"python.linting.flake8Enabled": true,
+		"python.formatting.provider": "autopep8",
+		"python.linting.lintOnSave": true,
+		"editor.formatOnSave": true
 	}
 }
