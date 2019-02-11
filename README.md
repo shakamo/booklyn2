@@ -50,5 +50,7 @@ conda install --channel https://conda.anaconda.org/anaconda pylint
     docker run -it --rm -v $(pwd):/app --entrypoint /bin/bash -t scraping
     docker run --rm -v $(pwd):/app scraping scrapy runspider scraping_anikore.py --set=FEED_EXPORT_ENCODING='utf-8'
 
-    pipenv run scrapy runspider scraping_anikore.py --set=FEED_EXPORT_ENCODING='utf-8'
+#### Execute
+    . .venv/bin/activate
+    scrapy runspider scraping_anikore.py --set=FEED_EXPORT_ENCODING='utf-8'
 
