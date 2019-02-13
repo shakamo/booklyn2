@@ -53,4 +53,5 @@ conda install --channel https://conda.anaconda.org/anaconda pylint
 #### Execute
     . .venv/bin/activate
     scrapy runspider scraping_anikore.py --set=FEED_EXPORT_ENCODING='utf-8'
+    scrapy runspider scraping_amazon.py --set=FEED_EXPORT_ENCODING='utf-8'
 
