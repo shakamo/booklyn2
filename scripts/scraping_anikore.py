@@ -59,11 +59,11 @@ class BlogSpider(scrapy.Spider):
         key = BlogSpider.pattern.search(response.url).group(0)
 
         title = app.sanitize(response.css(
-            '.animeDetailCommonHeadTitle > h2 > a::text')
+            '#page-top > section.l-animeDetailHeader > div > h1::text')
             .extract_first()[1:-1])
         result = BlogSpider.title_pattern.search(title)
         if result:
-            title = result.group(0)
+            title = result.group(1)
 
         value = {
             'title': title,
@@ -71,7 +71,6 @@ class BlogSpider(scrapy.Spider):
                                   .extract_first())
         }
 
-        logger.info(value)
         # Masterファイルを読み込み（シングルトン）
         master = master_file.MasterFile()
         master.append('anikore', key, value)
