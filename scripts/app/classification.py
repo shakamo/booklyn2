@@ -5,57 +5,63 @@ import fastText as ft
 from fastText import train_supervised
 
 import app
+from app.lib import logger
 
 from . import learning, master_file, traning_file
 
-lock = threading.Lock()
+logger = logger.get_module_logger(__name__)
 
 
-def classify(name, value, isLock=True):
-    if isLock:
-        with lock:
-            __classify(name, value, isLock)
-    else:
-        __classify(name, value, isLock)
+class Classify:
+    _instance = None
+    _lock = threading.Lock()
 
+    def __new__(cls):
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = super().__new__(cls)
+                cls._instance._lock = None
+        return cls._instance
 
-def __classify(name, value, isLock):
-    # Masterファイルを読み込み（シングルトン）
-    master = master_file.MasterFile()
+    def __init__(self):
+        try:
+            if self._lock is None:
+                self._lock = threading.Lock()
+        except IOError:
+            logger.error('Error')
+            raise NotImplementedError('Error')
 
-    data = master.get_training_data()
-    for name in data:
-        for uuid in data[name]:
-            if data[name][uuid]['key'] == value['key']:
-                data[name][uuid] = value
-                print('ある！')
-                return
+    def classify(name, value, isLock):
+        """
+        name: 種別（anikore, amazon,netflix, hulu）
+        """
+        master = master_file.MasterFile()
 
-    # fastTextクラスを取得（シングルトン）
-    f = FastTextML()
+        # fastTextクラスを取得（シングルトン）
+        f = FastTextML()
 
-    # fastTextのスコアを取得
-    uuid, score = f.predict(app.get_wakati(value['title']))
+        # fastTextのスコアを取得
+        uuid, score = f.predict(app.get_wakati(value['title']))
 
-    if uuid and 0.5 < score:
-        # 同じUUIDで上書き保存
-        master.add(name, uuid, value)
-    else:
-        # UUIDを採番して保存
-        uuid = str(u.uuid4())
-        master.add(name, uuid, value)
-        # 再学習前にマスタデータを保存
-        master.save()
-        # 再学習
-        if isLock:
-            learning.learn(uuid, app.get_wakati(value['title']))
+        if uuid and 0.5 < score:
+            # 同じUUIDで上書き保存
+            master.add(name, uuid, value)
+        else:
+            # UUIDを採番して保存
+            uuid = str(u.uuid4())
+            master.add(name, uuid, value)
+            # 再学習前にマスタデータを保存
+            master.save()
+            # 再学習
+            if isLock:
+                learning.learn(uuid, app.get_wakati(value['title']))
 
-    # 結果がどの程度違うのか、差分をログに出力
-    if master.get(name, uuid) is not None:
-        if value['title'] != master.get(name, uuid)['title']:
-            print(value['title'] + ' or ' + master.get(name, uuid)['title'])
-    else:
-        print('何かがおかしい')
+        # 結果がどの程度違うのか、差分をログに出力
+        if master.get(name, uuid) is not None:
+            if value['title'] != master.get(name, uuid)['title']:
+                print(value['title'] + ' or ' + master.get(name, uuid)['title'])
+        else:
+            print('何かがおかしい')
 
 
 class FastTextML:
@@ -76,11 +82,13 @@ class FastTextML:
         try:
             if self._lock is None:
                 self._lock = threading.Lock()
+            with self._lock:
                 if app.exists_output_fasttext_model():
                     self._model = ft.load_model(
                         app.get_output_fasttext_model())
 
         except IOError:
+            logger.error('load error to master.json')
             raise NotImplementedError('load error to model.bin')
 
     def predict(self, wakati_text):
@@ -99,10 +107,10 @@ class FastTextML:
         traning.reset()
 
         hasText = False
-        for name in data:
-            for uuid in data[name]:
+        for uuid in data:
+            for name in data[uuid]:
                 traning.append('__label__' + uuid + ' , ' +
-                               app.get_wakati(data[name][uuid]['title']))
+                               app.get_wakati(data[uuid][name]['title']))
                 hasText = True
 
         if hasText is False:

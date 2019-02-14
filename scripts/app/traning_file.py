@@ -1,8 +1,6 @@
 import threading
 import codecs
-import json
 import os
-import app
 
 
 class TraningFile:
@@ -22,21 +20,20 @@ class TraningFile:
         return cls._instance
 
     def __init__(self):
-        print()
+        self.file = 'output/training.txt'
 
     def reset(self):
-        if os.path.exists(app.get_root_path().joinpath('output').joinpath('training.txt')):
-            os.remove(app.get_root_path().joinpath(
-                'output').joinpath('training.txt'))
+        if os.path.exists(self.file):
+            os.remove(self.file)
 
     def append(self, value):
-        with open(app.get_root_path().joinpath('output').joinpath('training.txt'), 'a') as f:
+        with open(self.file, 'a') as f:
             f.write(value + '\n')
 
     def save_all(self, values):
         try:
             with self._lock:
-                with codecs.open(app.get_root_path().joinpath('output').joinpath('training.txt'), 'w', "utf-8") as f:
+                with codecs.open(self.file, 'w', "utf-8") as f:
                     eol = '\n'
                     print(*values, sep=eol, end=eol, file=f)
         except IOError:
