@@ -98,10 +98,10 @@ class BlogSpider(scrapy.Spider):
             self.check_format(key, value)
         except TypeError as error:
             logger.error(str(error) + ' ' + response.url + ' ')
-            open_in_browser(response)
             tpe, v, tb = sys.exc_info()
             backtrace.hook(reverse=True, strip_path=True,
                            tb=tb, tpe=tpe, value=v)
+            open_in_browser(response)
             pass
 
     def parse_episode(self, episodes, html):
