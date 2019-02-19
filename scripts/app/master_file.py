@@ -4,6 +4,7 @@ import json
 import uuid as u
 import os
 from app.lib import logger
+from app import traning_file
 
 logger = logger.get_module_logger(__name__)
 
@@ -59,14 +60,18 @@ class MasterFile:
 
         return self._data[name][uuid]
 
-    def get_training_data(self):
-        return self._data
-
     def save(self):
         try:
             with self._lock:
                 with codecs.open(self.file, 'w', "utf-8") as f:
                     json.dump(self._data, f, ensure_ascii=False)
+        except IOError:
+            raise NotImplementedError('save error to master.json')
+
+    def save_traning_file(self):
+        try:
+            with self._lock:
+                traning_file.TraningFile().create(self._data)
         except IOError:
             raise NotImplementedError('save error to master.json')
 

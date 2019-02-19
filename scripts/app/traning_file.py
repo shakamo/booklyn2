@@ -1,6 +1,9 @@
 import threading
 import codecs
 import os
+from . import master_file
+
+import app
 
 
 class TraningFile:
@@ -21,6 +24,20 @@ class TraningFile:
 
     def __init__(self):
         self.file = 'output/training.txt'
+
+    def create(self, master):
+        self.reset()
+
+        with open(self.file, 'a') as f:
+            for uuid in master:
+                for name in master[uuid]:
+                    for key in master[uuid][name]:
+                        year = master[uuid][name][key]['year']
+                        wakati_title = app.get_wakati(
+                            master[uuid][name][key]['title'])
+
+                        line = '__label__' + uuid + ' , ' + year + ' ' + wakati_title
+                        f.write(line + '\n')
 
     def reset(self):
         if os.path.exists(self.file):

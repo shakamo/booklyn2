@@ -11,7 +11,7 @@
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": false,
 		"python.linting.pep8Enabled": false,
-		"python.pythonPath": "./.venv/bin/python",
+		"python.pythonPath": ".venv/bin/python3",
 		"python.autoComplete.extraPaths": [
 			"./.venv/lib"
 		],

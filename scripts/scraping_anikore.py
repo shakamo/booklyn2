@@ -68,7 +68,11 @@ class BlogSpider(scrapy.Spider):
         value = {
             'title': title,
             'story': app.sanitize(response.css('blockquote::text')
-                                  .extract_first())
+                                  .extract_first()),
+            'year':
+                app.sanitize(response
+                             .css('.l-animeDetailBasicInfo > dl > div > dd > a::text')
+                             .extract_first())[0:4]
         }
 
         # Masterファイルを読み込み（シングルトン）
