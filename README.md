@@ -7,10 +7,10 @@
 2. venv の作成
     * python3 -m venv .venv
 3. venv を有効にする
-    * source scripts/bin/activate
+    * source .venv/bin/activate
 4. fastText のインストール
     * pipenv install
-4. Pipfile のインストール
+5. Pipfile のインストール
     * pipenv install
 
 
@@ -23,8 +23,7 @@ conda install --channel https://conda.anaconda.org/anaconda pylint
 
 
 #### fastText
-    git clone 
-    https://github.com/facebookresearch/fastText.git
+    git clone https://github.com/facebookresearch/fastText.git
     cd fastText
     make
     pip install cython
@@ -46,7 +45,7 @@ conda install --channel https://conda.anaconda.org/anaconda pylint
 
 #### Docker
     cd scripts
-    docker build -t scraping . -t 
+    docker build -t scraping .
     docker run -it --rm -v $(pwd):/app --entrypoint /bin/bash -t scraping
     docker run --rm -v $(pwd):/app scraping scrapy runspider scraping_anikore.py --set=FEED_EXPORT_ENCODING='utf-8'
 

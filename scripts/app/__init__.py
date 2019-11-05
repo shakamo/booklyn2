@@ -18,20 +18,20 @@ def get_wakati(resource):
     """
     文書を分かち書きし単語単位に分割する
     """
-    text = unicodedata.normalize('NFC', resource)
-    text = re.sub(r'[^ぁ-んァ-ンーa-zA-Z0-9一-龠０-９\-\r\s]+', '', text)
-    text = re.sub(r'[\s]+', ' ', text)
-    text = re.sub(r'[\n|\r|\t]', '', text)
-    text = re.sub(r'[１]', '1', text)
-    text = re.sub(r'[２]', '2', text)
-    text = re.sub(r'[３]', '3', text)
-    text = re.sub(r'[４]', '4', text)
-    text = re.sub(r'[５]', '5', text)
-    text = re.sub(r'[６]', '6', text)
-    text = re.sub(r'[７]', '7', text)
-    text = re.sub(r'[８]', '8', text)
-    text = re.sub(r'[９]', '9', text)
-    text = re.sub(r'[０]', '0', text)
+    text = sanitize(resource)
+    # text = re.sub(r'[^ぁ-んァ-ンーa-zA-Z0-9一-龠０-９\-\r\s]+', '', text)
+    # text = re.sub(r'[\s]+', ' ', text)
+    # text = re.sub(r'[\n|\r|\t]', '', text)
+    # text = re.sub(r'[１]', '1', text)
+    # text = re.sub(r'[２]', '2', text)
+    # text = re.sub(r'[３]', '3', text)
+    # text = re.sub(r'[４]', '4', text)
+    # text = re.sub(r'[５]', '5', text)
+    # text = re.sub(r'[６]', '6', text)
+    # text = re.sub(r'[７]', '7', text)
+    # text = re.sub(r'[８]', '8', text)
+    # text = re.sub(r'[９]', '9', text)
+    # text = re.sub(r'[０]', '0', text)
 
     tagger = MeCab.Tagger(
         '-Owakati -d /usr/local/lib/mecab/dic/mecab-ipadic-neologd')
@@ -48,7 +48,9 @@ def sanitize(resource):
     サニタイズ処理を行う
     UTF-8-MAC を UTF-8 に変換
     """
-    return unicodedata.normalize('NFC', resource).replace('\u3000', '')
+    # 正規化の4つの方法
+    # http://tech.albert2005.co.jp/501/
+    return unicodedata.normalize('NFKC', resource).replace('\u3000', '')
 
 
 def get_input_path():
