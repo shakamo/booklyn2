@@ -9,7 +9,9 @@
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts generate",
-    "lint": "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore ."
+    "lint": "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore .",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^0.2.4",
@@ -20,13 +22,27 @@
     "nuxt-property-decorator": "^2.5.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.0",
     "@nuxt/typescript-build": "^0.3.4",
     "@nuxtjs/eslint-config": "^1.0.1",
     "@nuxtjs/eslint-module": "^1.0.0",
+    "@storybook/addon-actions": "^5.2.5",
+    "@storybook/addon-links": "^5.2.5",
+    "@storybook/addons": "^5.2.5",
+    "@storybook/vue": "^5.2.5",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.6",
+    "babel-preset-vue": "^2.0.2",
+    "css-loader": "^3.2.0",
     "eslint": "^6.1.0",
-    "eslint-plugin-nuxt": ">=0.4.2"
+    "eslint-plugin-nuxt": ">=0.4.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0",
+    "sass-resources-loader": "^2.0.1",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.2"
   }
 }
