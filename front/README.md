@@ -1,6 +1,6 @@
-# booklyn
+# Booklyn
 
-> My doozie Nuxt.js project
+> My premium Nuxt.js project
 
 ## Build Setup
 
