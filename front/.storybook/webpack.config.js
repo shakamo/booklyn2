@@ -29,6 +29,7 @@ module.exports = {
             loader: "sass-resources-loader",
             options: {
               resources: [
+                path.resolve(__dirname, '../assets/default.css'),
                 path.resolve(__dirname, '../node_modules/bulma/css/bulma.css')
               ]
             }

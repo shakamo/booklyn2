@@ -30,5 +30,5 @@ export const emoji = () => ({
 
 export const logo = () => ({
   components: { logoo },
-  template: ' <logoo/>'
+  template: '<div class="container"><logoo/></div>'
 })
